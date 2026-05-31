@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shukatsu-mail-copilot"
+version = "0.1.0"
+description = "An AI-powered job hunting email assistant for Apple Mail and Notion workflows."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Ximian Meng" }
+]
+dependencies = [
+  "openai>=1.30.0",
+  "pandas>=2.2.0",
+  "python-dotenv>=1.0.1",
+  "requests>=2.31.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0"
+]
+
+[project.scripts]
+shukatsu-mail-copilot = "shukatsu_mail_copilot.pipeline:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
