@@ -9,6 +9,9 @@ An AI-powered job hunting email assistant that converts unstructured recruiting 
 
 Shukatsu Mail Copilot is a practical automation project that connects Apple Mail, an OpenAI-compatible extraction pipeline, and Notion to reduce the manual overhead of job hunting. It is designed to show end-to-end product thinking: ingestion, LLM prompting, data normalization, safety checks, persistence, and workflow integration.
 
+**日本語サマリー（採用担当者向け）**  
+就職活動メールを対象に、Apple Mail からの取り込み、AI による要約・行動抽出、Notion への構造化同期までを自動化する実用プロジェクトです。単なる要約ツールではなく、重要度分類や安全なメール処理も含めて、実際の運用を意識したプロダクト設計を行っています。
+
 ## Demo
 
 - Placeholder: `docs/images/demo-mailbox-overview.png`
