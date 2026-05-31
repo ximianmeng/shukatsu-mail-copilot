@@ -1,6 +1,31 @@
 # Shukatsu Mail Copilot
 
-An AI-powered job hunting email assistant.
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![OpenAI Compatible](https://img.shields.io/badge/OpenAI-Compatible-0A0A0A?logo=openai&logoColor=white)](https://platform.openai.com/docs)
+[![Notion API](https://img.shields.io/badge/Notion-API-000000?logo=notion&logoColor=white)](https://developers.notion.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+
+An AI-powered job hunting email assistant that converts unstructured recruiting emails into structured action items, summaries, and workflow-ready records.
+
+Shukatsu Mail Copilot is a practical automation project that connects Apple Mail, an OpenAI-compatible extraction pipeline, and Notion to reduce the manual overhead of job hunting. It is designed to show end-to-end product thinking: ingestion, LLM prompting, data normalization, safety checks, persistence, and workflow integration.
+
+## Demo
+
+- Placeholder: `docs/images/demo-mailbox-overview.png`
+- Placeholder: `docs/images/demo-structured-output.png`
+- Placeholder: `docs/images/demo-notion-sync.png`
+
+Suggested demo order for recruiters:
+
+1. Mailbox view with an incoming recruiting email
+2. Structured extraction result in terminal or CSV
+3. Final synced record in Notion
+
+## Why I Built This
+
+During job hunting, important emails arrive across multiple companies, event types, and deadlines. The manual workflow quickly becomes noisy: reading long Japanese recruiting emails, identifying deadlines, deciding whether action is required, and then recording the result somewhere else.
+
+I built Shukatsu Mail Copilot to solve that operational pain directly. Instead of treating LLMs as a toy summarizer, this project uses them as one component inside a safer workflow: ingest mail, extract structured fields, normalize output, classify urgency, and sync the result into a system that supports follow-up.
 
 ## Overview
 
@@ -30,7 +55,7 @@ The project started as a practical automation tool for personal job-hunt operati
 
 ## Architecture
 
-The workflow is:
+High-level workflow:
 
 1. Email ingestion from Apple Mail
 2. AI extraction into structured JSON
@@ -40,6 +65,27 @@ The workflow is:
 6. Optional safe mailbox organization
 
 More detail is in [docs/architecture.md](./docs/architecture.md).
+
+```mermaid
+flowchart LR
+    A["Apple Mail / Sample File"] --> B["Ingestion Layer"]
+    B --> C["Prompt Builder"]
+    C --> D["OpenAI-Compatible Model"]
+    D --> E["Normalization + Validation"]
+    E --> F["CSV Export"]
+    E --> G["Notion Sync"]
+    E --> H["Safe Routing Decision"]
+    H --> I["Move / Undo / Restore"]
+```
+
+```mermaid
+flowchart TD
+    A["Raw recruiting email"] --> B["Extract company / role / deadline / action"]
+    B --> C["Assign triage category and priority"]
+    C --> D{"Confidence and protection checks pass?"}
+    D -- Yes --> E["Write structured record and optionally move mail"]
+    D -- No --> F["Keep for manual review"]
+```
 
 ## Repository Structure
 
@@ -125,12 +171,62 @@ python -m shukatsu_mail_copilot restore-today
 
 The current implementation expects a Notion data source with fields for company, position, summaries, sender, category, deadlines, and action status. Optional fields such as confidence and triage category are added when the schema supports them.
 
+## Screenshot Strategy
+
+To make the repository more convincing for recruiters, capture a simple three-image story:
+
+1. `docs/images/demo-mailbox-overview.png`
+   Show Apple Mail with one realistic recruiting email selected.
+   Goal: communicate the real input source immediately.
+2. `docs/images/demo-structured-output.png`
+   Show the terminal output or generated CSV row after extraction.
+   Goal: prove that the system produces structured results, not just vague summaries.
+3. `docs/images/demo-notion-sync.png`
+   Show the final Notion database entry with company, deadline, category, and next action.
+   Goal: demonstrate workflow completion and practical product value.
+
+Optional extra images if you want a stronger portfolio effect:
+
+4. `docs/images/demo-safe-routing-report.png`
+   Show the safe move report table or dry-run output.
+5. `docs/images/demo-architecture-slide.png`
+   A designed one-page diagram summarizing the pipeline for non-technical reviewers.
+
+## Exactly Which Screenshots To Capture
+
+Capture these specific frames:
+
+1. Apple Mail selected-message view
+   Include sender, subject, and visible body content from an anonymized recruiting email.
+2. Terminal after running `python -m shukatsu_mail_copilot file examples/sample_mail.txt`
+   Include the structured JSON or success output.
+3. CSV result opened in Numbers, Excel, or a text editor
+   Show columns like company, deadline, category, priority, and next action.
+4. Notion database row view
+   Show the synced structured record.
+5. Safe move report
+   Show why a message was moved or kept for review.
+
+Tips:
+
+- Use anonymized data only.
+- Blur or replace personal names, addresses, company contacts, and IDs.
+- Keep browser tabs and desktop clutter out of frame.
+- Prefer 1440px-wide screenshots with readable text.
+
 ## Safety and Privacy
 
 - Secrets are loaded from `.env` and should never be committed.
 - Runtime outputs are written to `data/` and ignored by Git.
 - The safe move flow refuses low-confidence or protected messages.
 - This public repository excludes personal logs, historical mailbox data, backups, and app bundles.
+
+## Challenges & Lessons Learned
+
+- LLM output is useful but not reliable enough on its own, so normalization and fallback rules matter just as much as prompt design.
+- Workflow automation in a personal productivity context needs safety constraints, not just model accuracy.
+- Integrating multiple systems such as Apple Mail, CSV storage, and Notion introduces real product engineering tradeoffs around portability, error handling, and recoverability.
+- Building a public-facing repository from a personal automation tool requires a second layer of engineering work: sanitization, documentation, reproducibility, and demo design.
 
 ## Future Roadmap
 
@@ -146,11 +242,12 @@ This repository is strongest when framed as:
 - A practical automation tool solving a real workflow problem
 - An example of LLM extraction with normalization and safety checks
 - A local-first integration project spanning Apple Mail, AI APIs, and Notion
+- A project that demonstrates engineering judgment around safety, data shape, and automation risk
 
 To strengthen it further, consider adding:
 
 - Real anonymized fixtures for repeatable evaluation
-- Screenshots of the Notion sync result or launcher UI
+- Real screenshots in the placeholder locations above
 - A small demo video or GIF
 - CI for tests and linting
 - A clearer separation between provider adapters and core domain logic
